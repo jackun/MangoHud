@@ -1,0 +1,9 @@
+[submodule "imgui"]
+	path = 3rdparty/imgui/src
+	url = https://github.com/ocornut/imgui.git
+[submodule "3rdparty/Vulkan-Docs"]
+	path = 3rdparty/Vulkan-Docs
+	url = https://github.com/KhronosGroup/Vulkan-Docs.git
+[submodule "3rdparty/Vulkan-Loader"]
+	path = 3rdparty/Vulkan-Loader
+	url = https://github.com/KhronosGroup/Vulkan-Loader.git
