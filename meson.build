@@ -23,7 +23,7 @@ project('overlay-layer',
   version : 'v0.0.1',
   license : 'MIT',
   meson_version : '>= 0.46',
-  default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release', 'c_std=c99', 'cpp_std=c++17']
+  default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release', 'c_std=c99', 'cpp_std=c++14']
 )
 
 cc = meson.get_compiler('c')
@@ -194,9 +194,6 @@ sha1_h = custom_target(
   build_always : true, # commit sha1 can change without having touched these files
 )
 
-# Dispatch structs don't seem to be in vk_layer.h anymore, if they ever where.
-# For now, generate them from vk.xml. Probably will use a custom small structs
-# when i figure out what is even needed.
 vk_layer_table_helpers = []
 loader_genvk_py = files('3rdparty/Vulkan-Loader/scripts/loader_genvk.py')
 foreach s : ['vk_dispatch_table_helper.h', 'vk_layer_dispatch_table.h']#, 'vk_loader_extensions.h', 'vk_loader_extensions.c']
@@ -218,7 +215,6 @@ vk_enum_to_str = custom_target(
     '--outdir', meson.current_build_dir()
   ],
 )
-
 
 util_files = files(
   'mesa/util/hash_table.c',
