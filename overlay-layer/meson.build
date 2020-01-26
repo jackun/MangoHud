@@ -34,6 +34,7 @@ endforeach
 vklayer_files = files(
   'overlay.cpp',
   'overlay_params.c',
+  'font_unispace.c',
 )
 
 vklayer_mesa_overlay = shared_library(
