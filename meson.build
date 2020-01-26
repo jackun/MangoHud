@@ -75,6 +75,14 @@ if cc.compiles('''
   pre_args += '-DHAVE_TIMESPEC_GET'
 endif
 
+# Check for GCC style builtins
+foreach b : ['bswap32', 'bswap64', 'clz', 'clzll', 'ctz', 'expect', 'ffs',
+             'ffsll', 'popcount', 'popcountll', 'unreachable']
+  if cc.has_function(b)
+    pre_args += '-DHAVE___BUILTIN_@0@'.format(b.to_upper())
+  endif
+endforeach
+
 null_dep = dependency('', required : false)
 
 vulkan_wsi_args = []
