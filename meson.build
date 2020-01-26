@@ -35,7 +35,6 @@ pre_args = [
   '-D__STDC_FORMAT_MACROS',
   '-D__STDC_LIMIT_MACROS',
   '-DPACKAGE_VERSION="@0@"'.format(meson.project_version()),
-  '-DUSE_GCC_ATOMIC_BUILTINS',
 ]
 
 # Define DEBUG for debug builds only (debugoptimized is not included on this one)
@@ -47,6 +46,32 @@ endif
 if ['linux', 'cygwin', 'gnu'].contains(host_machine.system())
   pre_args += '-D_GNU_SOURCE'
   pre_args += '-DHAVE_PTHREAD'
+endif
+
+# Check for GCC style atomics
+if cc.compiles('''#include <stdint.h>
+                  int main() {
+                    struct {
+                      uint64_t *v;
+                    } x;
+                    return (int)__atomic_load_n(x.v, __ATOMIC_ACQUIRE) &
+                           (int)__atomic_add_fetch(x.v, (uint64_t)1, __ATOMIC_ACQ_REL);
+
+                  }''',
+               name : 'GCC atomic builtins')
+  pre_args += '-DUSE_GCC_ATOMIC_BUILTINS'
+endif
+
+# Not in C99, needs POSIX
+if cc.compiles('''
+                 #define _GNU_SOURCE
+                 #include <time.h>
+                  int main() {
+                    struct timespec ts;
+                    return timespec_get(&ts, TIME_UTC);
+
+                  }''',
+               name : 'Supports timespec_get')
   pre_args += '-DHAVE_TIMESPEC_GET'
 endif
 
